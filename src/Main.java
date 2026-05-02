@@ -1,7 +1,7 @@
 import java.util.Scanner;
 
 public class Main {
-    public static void main(String[] args){
+    public static void main(String[] args) {
 
         //task1
         Scanner scanner = new Scanner(System.in);
@@ -16,18 +16,31 @@ public class Main {
         } else {
             System.out.println("NO");
         }
-        scanner.close();
-        int[] arr={1,2,3,4,89,5,67};
-        arr=bubblesort(arr);
-        for(int i=0;i<arr.length;i++){
-            System.out.println(arr[i]);
+        //task2
+        Scanner sc = new Scanner(System.in);
+        System.out.println("K-th Smallest Element Finder");
+        System.out.print("Enter size of array: ");
+        int size = sc.nextInt();
 
+        int[] numbers = new int[size];
+        System.out.print("Enter " + size + " numbers: ");
+        for (int index = 0; index < size; index++) {
+            numbers[index] = sc.nextInt();
         }
 
+        System.out.print("Enter k ( smallest element to find): ");
+        int kPosition = sc.nextInt();
 
-
-
+        if (kPosition < 1 || kPosition > size) {
+            System.out.println("Invalid k! Must be between 1 and " + size);
+        } else {
+            int result = findKthSmallest(numbers, kPosition);
+            System.out.println("The " + kPosition + "-th smallest element is: " + result);
+        }
+        sc.close();
     }
+
+
     //task1
     // Checks if two strings are anagrams by sorting both and comparing
     private static boolean areAnagrams(String firstWord, String secondWord) {
@@ -45,27 +58,35 @@ public class Main {
         return true;
     }
 
-    public static int[] bubblesort(int[] arr){
-        for (int i=0; i<arr.length-1;i++){
-            for(int j=0; j<arr.length-i-1;j++){
-                if(arr[j]>arr[j+1]){
-                    int temp=arr[j];
-                    arr[j]=arr[j+1];
-                    arr[j+1]=temp;
+    //task2
+    // Finds the k-th smallest element by sorting and picking index k-1
+    private static int findKthSmallest(int[] numbers, int kPosition) {
+        sortAscending(numbers);
+        return numbers[kPosition - 1];
+    }
+
+    public static int[] bubblesort(int[] arr) {
+        for (int i = 0; i < arr.length - 1; i++) {
+            for (int j = 0; j < arr.length - i - 1; j++) {
+                if (arr[j] > arr[j + 1]) {
+                    int temp = arr[j];
+                    arr[j] = arr[j + 1];
+                    arr[j + 1] = temp;
                 }
 
             }
         }
         return arr;
     }
-    public static char[] sortCharacters(char[] charachters){
-        int length= charachters.length;
-        for(int out=0; out<length-1;out++){
-            for(int inn=0; inn<length-out-1;inn++){
-                if(charachters[inn]>charachters[inn+1]){
-                    char temp=charachters[inn];
-                    charachters[inn]=charachters[inn+1];
-                    charachters[inn+1]=temp;
+
+    public static char[] sortCharacters(char[] charachters) {
+        int length = charachters.length;
+        for (int out = 0; out < length - 1; out++) {
+            for (int inn = 0; inn < length - out - 1; inn++) {
+                if (charachters[inn] > charachters[inn + 1]) {
+                    char temp = charachters[inn];
+                    charachters[inn] = charachters[inn + 1];
+                    charachters[inn + 1] = temp;
 
                 }
 
@@ -74,4 +95,18 @@ public class Main {
         return charachters;
 
     }
+    // Sorts an integer array using insertion sort
+    private static void sortAscending(int[] numbers) {
+        int length = numbers.length;
+        for (int outer = 1; outer < length; outer++) {
+            int currentElement = numbers[outer];
+            int inner = outer - 1;
+            while (inner >= 0 && numbers[inner] > currentElement) {
+                numbers[inner + 1] = numbers[inner];
+                inner--;
+            }
+            numbers[inner + 1] = currentElement;
+        }
+    }
+
 }
