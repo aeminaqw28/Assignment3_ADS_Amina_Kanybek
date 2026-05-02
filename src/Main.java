@@ -1,11 +1,33 @@
 import java.util.Scanner;
 
 public class Main {
-    public static void main(String[] args) {
 
-        //task1
-        Scanner scanner = new Scanner(System.in);
-        System.out.println("Anagram Checker");
+    static Scanner scanner = new Scanner(System.in);
+
+    public static void main(String[] args) {
+        System.out.println("Choose task:");
+        System.out.println("1 - Anagram Checker");
+        System.out.println("2 - K-th Smallest Element");
+        System.out.println("3 - Median Finder");
+        System.out.println("4 - Optimal Shipping");
+        System.out.print("Your choice: ");
+
+        int choice = scanner.nextInt();
+        scanner.nextLine();
+
+        switch (choice) {
+            case 1: runAnagramChecker(); break;
+            case 2: runKthSmallestFinder(); break;
+
+            default: System.out.println("Invalid choice!");
+        }
+
+        scanner.close();
+    }
+
+    // TASK 1
+    private static void runAnagramChecker() {
+        System.out.println("\n Anagram Checker ");
         System.out.print("Enter first word: ");
         String firstWord = scanner.nextLine().trim();
         System.out.print("Enter second word: ");
@@ -16,39 +38,14 @@ public class Main {
         } else {
             System.out.println("NO");
         }
-        //task2
-        Scanner sc = new Scanner(System.in);
-        System.out.println("K-th Smallest Element Finder");
-        System.out.print("Enter size of array: ");
-        int size = sc.nextInt();
-
-        int[] numbers = new int[size];
-        System.out.print("Enter " + size + " numbers: ");
-        for (int index = 0; index < size; index++) {
-            numbers[index] = sc.nextInt();
-        }
-
-        System.out.print("Enter k ( smallest element to find): ");
-        int kPosition = sc.nextInt();
-
-        if (kPosition < 1 || kPosition > size) {
-            System.out.println("Invalid k! Must be between 1 and " + size);
-        } else {
-            int result = findKthSmallest(numbers, kPosition);
-            System.out.println("The " + kPosition + "-th smallest element is: " + result);
-        }
-        sc.close();
     }
 
-
-    //task1
-    // Checks if two strings are anagrams by sorting both and comparing
     private static boolean areAnagrams(String firstWord, String secondWord) {
         if (firstWord.length() != secondWord.length()) {
             return false;
         }
-        char[] firstSorted = sortCharacters(firstWord.toLowerCase().toCharArray());
-        char[] secondSorted = sortCharacters(secondWord.toLowerCase().toCharArray());
+        char[] firstSorted  = sortCharactersByBubble(firstWord.toLowerCase().toCharArray());
+        char[] secondSorted = sortCharactersByBubble(secondWord.toLowerCase().toCharArray());
 
         for (int index = 0; index < firstSorted.length; index++) {
             if (firstSorted[index] != secondSorted[index]) {
@@ -58,45 +55,48 @@ public class Main {
         return true;
     }
 
-    //task2
-    // Finds the k-th smallest element by sorting and picking index k-1
+    private static char[] sortCharactersByBubble(char[] characters) {
+        int length = characters.length;
+        for (int outer = 0; outer < length - 1; outer++) {
+            for (int inner = 0; inner < length - outer - 1; inner++) {
+                if (characters[inner] > characters[inner + 1]) {
+                    char temp        = characters[inner];
+                    characters[inner]     = characters[inner + 1];
+                    characters[inner + 1] = temp;
+                }
+            }
+        }
+        return characters;
+    }
+
+    // TASK 2
+    private static void runKthSmallestFinder() {
+        System.out.println("\n K-th Smallest Element ");
+        System.out.print("Enter size of array: ");
+        int size = scanner.nextInt();
+
+        int[] numbers = new int[size];
+        System.out.print("Enter " + size + " numbers: ");
+        for (int index = 0; index < size; index++) {
+            numbers[index] = scanner.nextInt();
+        }
+
+        System.out.print("Enter k: ");
+        int kPosition = scanner.nextInt();
+
+        if (kPosition < 1 || kPosition > size) {
+            System.out.println("Invalid k! Must be between 1 and " + size);
+        } else {
+            System.out.println(findKthSmallest(numbers, kPosition));
+        }
+    }
+
     private static int findKthSmallest(int[] numbers, int kPosition) {
-        sortAscending(numbers);
+        sortAscendingByInsertion(numbers);
         return numbers[kPosition - 1];
     }
 
-    public static int[] bubblesort(int[] arr) {
-        for (int i = 0; i < arr.length - 1; i++) {
-            for (int j = 0; j < arr.length - i - 1; j++) {
-                if (arr[j] > arr[j + 1]) {
-                    int temp = arr[j];
-                    arr[j] = arr[j + 1];
-                    arr[j + 1] = temp;
-                }
-
-            }
-        }
-        return arr;
-    }
-
-    public static char[] sortCharacters(char[] charachters) {
-        int length = charachters.length;
-        for (int out = 0; out < length - 1; out++) {
-            for (int inn = 0; inn < length - out - 1; inn++) {
-                if (charachters[inn] > charachters[inn + 1]) {
-                    char temp = charachters[inn];
-                    charachters[inn] = charachters[inn + 1];
-                    charachters[inn + 1] = temp;
-
-                }
-
-            }
-        }
-        return charachters;
-
-    }
-    // Sorts an integer array using insertion sort
-    private static void sortAscending(int[] numbers) {
+    private static void sortAscendingByInsertion(int[] numbers) {
         int length = numbers.length;
         for (int outer = 1; outer < length; outer++) {
             int currentElement = numbers[outer];
@@ -108,5 +108,4 @@ public class Main {
             numbers[inner + 1] = currentElement;
         }
     }
-
 }
